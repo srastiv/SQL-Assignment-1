@@ -1,0 +1,63 @@
+
+mysql> CREATE TABLE Customers (cust_id INT AUTO_INCREMENT PRIMARY KEY, cust_name VARCHAR(30),product VARCHAR(30), quantity INT, total_price DECIMAL(10, 2));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> -- Insert customer records with Indian names and kitchen-related products
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> INSERT INTO customers (cust_name, product, quantity, total_price) VALUES ('Rajesh Sharma', 'Pressure Cooker', 2, 1200.00), ('Priya Patel', 'Mixing Bowl', 3, 200.50), ('Suresh Verma', 'Cutting Board', 1, 50.25), ('Neha Gupta', 'Non-Stick Pan', 4, 500.00), ('Meera Singh', 'Blender', 2, 120.50);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE customers ADD price_per_qnty DECIMAL(10, 2);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> CREATE VIEW Cust_View AS SELECT cust_id, cust_name FROM Customers;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE OR REPLACE VIEW Cust_View AS SELECT cust_id, product, total_price FROM Customers;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DROP VIEW Cust_View;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE INDEX cust_index ON Customers(cust_name);
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DROP INDEX cust_index ON Customers;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc Customers
+    -> ;
++----------------+---------------+------+-----+---------+----------------+
+| Field          | Type          | Null | Key | Default | Extra          |
++----------------+---------------+------+-----+---------+----------------+
+| cust_id        | int           | NO   | PRI | NULL    | auto_increment |
+| cust_name      | varchar(30)   | YES  |     | NULL    |                |
+| product        | varchar(30)   | YES  |     | NULL    |                |
+| quantity       | int           | YES  |     | NULL    |                |
+| total_price    | decimal(10,2) | YES  |     | NULL    |                |
+| price_per_qnty | decimal(10,2) | YES  |     | NULL    |                |
++----------------+---------------+------+-----+---------+----------------+
+6 rows in set (0.01 sec)
+
+mysql> SELECT c.cust_id, c.cust_name, c.product, c.quantity, c.total_price FROM Customers AS c;
++---------+---------------+-----------------+----------+-------------+
+| cust_id | cust_name     | product         | quantity | total_price |
++---------+---------------+-----------------+----------+-------------+
+|       1 | Rajesh Sharma | Pressure Cooker |        2 |     1200.00 |
+|       2 | Priya Patel   | Mixing Bowl     |        3 |      200.50 |
+|       3 | Suresh Verma  | Cutting Board   |        1 |       50.25 |
+|       4 | Neha Gupta    | Non-Stick Pan   |        4 |      500.00 |
+|       5 | Meera Singh   | Blender         |        2 |      120.50 |
++---------+---------------+-----------------+----------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> 
+mysql> DROP TABLE Customers;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> 
