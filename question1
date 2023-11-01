@@ -1,0 +1,175 @@
+
+mysql> CREATE TABLE Student (roll_no INT PRIMARY KEY, name VARCHAR(50), division VARCHAR(1), branch VARCHAR(30),city VARCHAR(30), marks INT );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> INSERT INTO student (roll_no, name, division, branch, city, marks)
+    -> VALUES (1, 'John Doe', 'A', 'Computer Science', 'New York', 95);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO student (roll_no, name, division, branch, city, marks)
+    -> VALUES (2, 'Omake', 'B', 'Electronics Engineering', 'Goa', 88);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO student (roll_no, name, division, branch, city, marks) VALUES (3, 'Deepti', 'A', 'Mechanical', 'Pune', 67);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO student (roll_no, name, division, branch, city, marks) VALUES (4, 'Shriya', 'A', 'Information Technology', 'Pune', 74);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO student (roll_no, name, division, branch, city, marks) VALUES (5, 'Sras', 'A', 'Information Technology', 'Lucknow', 82);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO student (roll_no, name, division, branch, city, marks) VALUES (6, 'Saty', 'B', 'Electrical', 'Lucknow', 94);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO student (roll_no, name, division, branch, city, marks) VALUES (7, 'Katy', 'B', 'Civil', 'Pune', 94); 
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO student (roll_no, name, division, branch, city, marks) VALUES (8, 'Triparna', 'B', 'AIML', 'Goa', 56);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO student (roll_no, name, division, branch, city, marks) VALUES (9, 'Rollie', 'A', 'Computer Science', 'Delhi', 68);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO student (roll_no, name, division, branch, city, marks) VALUES (10, 'Dorlekar', 'B', 'Electronics', 'Pune', 79);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT name, city FROM Student
+    -> ;
++----------+----------+
+| name     | city     |
++----------+----------+
+| John Doe | New York |
+| Omake    | Goa      |
+| Deepti   | Pune     |
+| Shriya   | Pune     |
+| Sras     | Lucknow  |
+| Saty     | Lucknow  |
+| Katy     | Pune     |
+| Triparna | Goa      |
+| Rollie   | Delhi    |
+| Dorlekar | Pune     |
++----------+----------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT DISTINCT name FROM Student
+    -> ;
++----------+
+| name     |
++----------+
+| John Doe |
+| Omake    |
+| Deepti   |
+| Shriya   |
+| Sras     |
+| Saty     |
+| Katy     |
+| Triparna |
+| Rollie   |
+| Dorlekar |
++----------+
+10 rows in set (0.01 sec)
+
+mysql> SELECT * FROM Student;
++---------+----------+----------+-------------------------+----------+-------+
+| roll_no | name     | division | branch                  | city     | marks |
++---------+----------+----------+-------------------------+----------+-------+
+|       1 | John Doe | A        | Computer Science        | New York |    95 |
+|       2 | Omake    | B        | Electronics Engineering | Goa      |    88 |
+|       3 | Deepti   | A        | Mechanical              | Pune     |    67 |
+|       4 | Shriya   | A        | Information Technology  | Pune     |    74 |
+|       5 | Sras     | A        | Information Technology  | Lucknow  |    82 |
+|       6 | Saty     | B        | Electrical              | Lucknow  |    94 |
+|       7 | Katy     | B        | Civil                   | Pune     |    94 |
+|       8 | Triparna | B        | AIML                    | Goa      |    56 |
+|       9 | Rollie   | A        | Computer Science        | Delhi    |    68 |
+|      10 | Dorlekar | B        | Electronics             | Pune     |    79 |
++---------+----------+----------+-------------------------+----------+-------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Student WHERE marks > 75;
++---------+----------+----------+-------------------------+----------+-------+
+| roll_no | name     | division | branch                  | city     | marks |
++---------+----------+----------+-------------------------+----------+-------+
+|       1 | John Doe | A        | Computer Science        | New York |    95 |
+|       2 | Omake    | B        | Electronics Engineering | Goa      |    88 |
+|       5 | Sras     | A        | Information Technology  | Lucknow  |    82 |
+|       6 | Saty     | B        | Electrical              | Lucknow  |    94 |
+|       7 | Katy     | B        | Civil                   | Pune     |    94 |
+|      10 | Dorlekar | B        | Electronics             | Pune     |    79 |
++---------+----------+----------+-------------------------+----------+-------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Student WHERE name LIKE 'S%';
++---------+--------+----------+------------------------+---------+-------+
+| roll_no | name   | division | branch                 | city    | marks |
++---------+--------+----------+------------------------+---------+-------+
+|       4 | Shriya | A        | Information Technology | Pune    |    74 |
+|       5 | Sras   | A        | Information Technology | Lucknow |    82 |
+|       6 | Saty   | B        | Electrical             | Lucknow |    94 |
++---------+--------+----------+------------------------+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Student WHERE marks >=50 AND marks <=60;
++---------+----------+----------+--------+------+-------+
+| roll_no | name     | division | branch | city | marks |
++---------+----------+----------+--------+------+-------+
+|       8 | Triparna | B        | AIML   | Goa  |    56 |
++---------+----------+----------+--------+------+-------+
+1 row in set (0.01 sec)
+
+mysql> SELECT * FROM student WHERE branch = 'Computer Science' AND city = 'Pune';
+Empty set (0.00 sec)
+
+mysql> UPDATE Student SET branch = 'IT' where roll_no = 9;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> DELETE FROM Student WHERE division = 'B';
+Query OK, 5 rows affected (0.00 sec)
+
+mysql> CREATE TABLE TE_Students(roll_no INT PRIMARY KEY, name VARCHAR(30))
+    -> ;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> SELECT roll_no
+    -> FROM Student
+    -> UNION
+    -> SELECT roll_no
+    -> FROM TE_Students;
++---------+
+| roll_no |
++---------+
+|       1 |
+|       3 |
+|       4 |
+|       5 |
+|       9 |
++---------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT UPPER(name) AS upper_case_name FROM Student;
++-----------------+
+| upper_case_name |
++-----------------+
+| JOHN DOE        |
+| DEEPTI          |
+| SHRIYA          |
+| SRAS            |
+| ROLLIE          |
++-----------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT MARKS, CONV(marks, 10, 2) AS binary_marks, CONV(marks, 10, 16) AS hex_marks FROM Student;
++-------+--------------+-----------+
+| MARKS | binary_marks | hex_marks |
++-------+--------------+-----------+
+|    95 | 1011111      | 5F        |
+|    67 | 1000011      | 43        |
+|    74 | 1001010      | 4A        |
+|    82 | 1010010      | 52        |
+|    68 | 1000100      | 44        |
++-------+--------------+-----------+
+5 rows in set (0.01 sec)
+
+mysql>
