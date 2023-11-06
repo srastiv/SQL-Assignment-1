@@ -1,0 +1,245 @@
+mysql> use abcdb
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+
+mysql> CREATE TABLE CUSTOMERS(id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(20), address VARCHAR(150), salary DECIMAL(10,2));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE TABLE ORDERS(O_ID INT AUTO_INCREMENT PRIMARY KEY, O_DATE DATE NOT NULL, CUSTOMER_ID INT NOT NULL, AMOUNT DECIMAL(10,2)NOT NULL, FOREIGN KEY (CUSTOMER_ID) REFERENCES CUSTOMERS(ID));
+Query OK, 0 rows affected (0.01 sec)
+
+
+mysql> INSERT INTO customers (name, address, salary)
+    -> VALUES
+    ->     ('Customer 1', 'Address 1', 50000.00),
+    ->     ('Customer 2', 'Address 2', 60000.00),
+    ->     ('Customer 3', 'Address 3', 75000.00),
+    ->     ('Customer 4', 'Address 4', 55000.00),
+    ->     ('Customer 5', 'Address 5', 70000.00);
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO ORDERS (O_DATE, customer_id, amount)
+    -> VALUES
+    ->     ('2023-11-01', 1, 100.00),
+    ->     ('2023-11-02', 2, 150.00),
+    ->     ('2023-11-03', 3, 200.00),
+    ->     ('2023-11-04', 4, 120.00),
+    ->     ('2023-11-05', 5, 180.00);
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> SELECT c.id, c.name, o.amount, o.O_DATE FROM CUSTOMERS c INNER JOIN ORDERS o ON c.id = o.customer_id;
++----+------------+--------+------------+
+| id | name       | amount | O_DATE     |
++----+------------+--------+------------+
+|  1 | Customer 1 | 100.00 | 2023-11-01 |
+|  2 | Customer 2 | 150.00 | 2023-11-02 |
+|  3 | Customer 3 | 200.00 | 2023-11-03 |
+|  4 | Customer 4 | 120.00 | 2023-11-04 |
+|  5 | Customer 5 | 180.00 | 2023-11-05 |
++----+------------+--------+------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT c.id, c.name, o.amount, o.O_DATE
+    -> FROM customers c
+    -> LEFT OUTER JOIN ORDERS o ON c.id = o.customer_id;
++----+------------+--------+------------+
+| id | name       | amount | O_DATE     |
++----+------------+--------+------------+
+|  1 | Customer 1 | 100.00 | 2023-11-01 |
+|  2 | Customer 2 | 150.00 | 2023-11-02 |
+|  3 | Customer 3 | 200.00 | 2023-11-03 |
+|  4 | Customer 4 | 120.00 | 2023-11-04 |
+|  5 | Customer 5 | 180.00 | 2023-11-05 |
++----+------------+--------+------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT c.id, c.name, o.amount, o.O_DATE FROM CUSTOMERS c RIGHT OUTER JOIN ORDERS o ON c.id = o.customer_id;
++------+------------+--------+------------+
+| id   | name       | amount | O_DATE     |
++------+------------+--------+------------+
+|    1 | Customer 1 | 100.00 | 2023-11-01 |
+|    2 | Customer 2 | 150.00 | 2023-11-02 |
+|    3 | Customer 3 | 200.00 | 2023-11-03 |
+|    4 | Customer 4 | 120.00 | 2023-11-04 |
+|    5 | Customer 5 | 180.00 | 2023-11-05 |
++------+------------+--------+------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT c.id, c.name, o.amount, o.O_DATE
+    -> FROM customers c
+    -> LEFT OUTER JOIN ORDERS o ON c.id = o.customer_id
+    -> UNION ALL
+    -> -- Right outer join
+    -> SELECT c.id, c.name, o.amount, o.O_DATE
+    -> FROM customers c
+    -> RIGHT OUTER JOIN ORDERS o ON c.id = o.customer_id;
++------+------------+--------+------------+
+| id   | name       | amount | O_DATE     |
++------+------------+--------+------------+
+|    1 | Customer 1 | 100.00 | 2023-11-01 |
+|    2 | Customer 2 | 150.00 | 2023-11-02 |
+|    3 | Customer 3 | 200.00 | 2023-11-03 |
+|    4 | Customer 4 | 120.00 | 2023-11-04 |
+|    5 | Customer 5 | 180.00 | 2023-11-05 |
+|    1 | Customer 1 | 100.00 | 2023-11-01 |
+|    2 | Customer 2 | 150.00 | 2023-11-02 |
+|    3 | Customer 3 | 200.00 | 2023-11-03 |
+|    4 | Customer 4 | 120.00 | 2023-11-04 |
+|    5 | Customer 5 | 180.00 | 2023-11-05 |
++------+------------+--------+------------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT
+    ->     c1.name AS customer1,
+    ->     c2.name AS customer2,
+    ->     c1.address AS shared_address
+    -> FROM customers c1
+    -> JOIN customers c2
+    -> ON c1.address = c2.address
+    -> AND c1.id < c2.id;
+Empty set (0.00 sec)
+
+mysql> SELECT c.id, c.name, o.amount, o.O_DATE
+    -> FROM customers c
+    -> CROSS JOIN ORDERS o;
++----+------------+--------+------------+
+| id | name       | amount | O_DATE     |
++----+------------+--------+------------+
+|  5 | Customer 5 | 100.00 | 2023-11-01 |
+|  4 | Customer 4 | 100.00 | 2023-11-01 |
+|  3 | Customer 3 | 100.00 | 2023-11-01 |
+|  2 | Customer 2 | 100.00 | 2023-11-01 |
+|  1 | Customer 1 | 100.00 | 2023-11-01 |
+|  5 | Customer 5 | 150.00 | 2023-11-02 |
+|  4 | Customer 4 | 150.00 | 2023-11-02 |
+|  3 | Customer 3 | 150.00 | 2023-11-02 |
+|  2 | Customer 2 | 150.00 | 2023-11-02 |
+|  1 | Customer 1 | 150.00 | 2023-11-02 |
+|  5 | Customer 5 | 200.00 | 2023-11-03 |
+|  4 | Customer 4 | 200.00 | 2023-11-03 |
+|  3 | Customer 3 | 200.00 | 2023-11-03 |
+|  2 | Customer 2 | 200.00 | 2023-11-03 |
+|  1 | Customer 1 | 200.00 | 2023-11-03 |
+|  5 | Customer 5 | 120.00 | 2023-11-04 |
+|  4 | Customer 4 | 120.00 | 2023-11-04 |
+|  3 | Customer 3 | 120.00 | 2023-11-04 |
+|  2 | Customer 2 | 120.00 | 2023-11-04 |
+|  1 | Customer 1 | 120.00 | 2023-11-04 |
+|  5 | Customer 5 | 180.00 | 2023-11-05 |
+|  4 | Customer 4 | 180.00 | 2023-11-05 |
+|  3 | Customer 3 | 180.00 | 2023-11-05 |
+|  2 | Customer 2 | 180.00 | 2023-11-05 |
+|  1 | Customer 1 | 180.00 | 2023-11-05 |
++----+------------+--------+------------+
+25 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMERS WHERE SALARY > 20000;
++----+------------+-----------+----------+
+| id | name       | address   | salary   |
++----+------------+-----------+----------+
+|  1 | Customer 1 | Address 1 | 50000.00 |
+|  2 | Customer 2 | Address 2 | 60000.00 |
+|  3 | Customer 3 | Address 3 | 75000.00 |
+|  4 | Customer 4 | Address 4 | 55000.00 |
+|  5 | Customer 5 | Address 5 | 70000.00 |
++----+------------+-----------+----------+
+5 rows in set (0.00 sec)
+
+mysql> CREATE TABLE cust_bkp AS SELECT * FROM customers;
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> DESC CUST_BKP
+    -> ;
++---------+---------------+------+-----+---------+-------+
+| Field   | Type          | Null | Key | Default | Extra |
++---------+---------------+------+-----+---------+-------+
+| id      | int           | NO   |     | 0       |       |
+| name    | varchar(20)   | YES  |     | NULL    |       |
+| address | varchar(150)  | YES  |     | NULL    |       |
+| salary  | decimal(10,2) | YES  |     | NULL    |       |
++---------+---------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> DESC CUSTOMERS;
++---------+---------------+------+-----+---------+----------------+
+| Field   | Type          | Null | Key | Default | Extra          |
++---------+---------------+------+-----+---------+----------------+
+| id      | int           | NO   | PRI | NULL    | auto_increment |
+| name    | varchar(20)   | YES  |     | NULL    |                |
+| address | varchar(150)  | YES  |     | NULL    |                |
+| salary  | decimal(10,2) | YES  |     | NULL    |                |
++---------+---------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> ALTER TABLE CUSTOMERS ADD AGE INT;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC CUSTOMERS;
++---------+---------------+------+-----+---------+----------------+
+| Field   | Type          | Null | Key | Default | Extra          |
++---------+---------------+------+-----+---------+----------------+
+| id      | int           | NO   | PRI | NULL    | auto_increment |
+| name    | varchar(20)   | YES  |     | NULL    |                |
+| address | varchar(150)  | YES  |     | NULL    |                |
+| salary  | decimal(10,2) | YES  |     | NULL    |                |
+| AGE     | int           | YES  |     | NULL    |                |
++---------+---------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> UPDATE CUSTOMERS
+    -> SET AGE = 30
+    -> WHERE name = 'Customer 1';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> 
+mysql> UPDATE CUSTOMERS
+    -> SET AGE = 28
+    -> WHERE name = 'Customer 2';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> 
+mysql> UPDATE CUSTOMERS
+    -> SET AGE = 35
+    -> WHERE name = 'Customer 3';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> 
+mysql> UPDATE CUSTOMERS
+    -> SET AGE = 26
+    -> WHERE name = 'Customer 4';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> 
+mysql> UPDATE CUSTOMERS
+    -> SET AGE = 32
+    -> WHERE name = 'Customer 5';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> 
+mysql> UPDATE CUSTOMERS c SET c.salary = c.salary * 1.10 WHERE c.age >= 24;
+Query OK, 5 rows affected (0.00 sec)
+Rows matched: 5  Changed: 5  Warnings: 0
+
+mysql> DELETE FROM CUSTOMERS WHERE AGE >26;
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`abcdb`.`orders`, CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`CUSTOMER_ID`) REFERENCES `customers` (`id`))
+mysql> SET FOREIGN_KEY_CHECKS = 0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DELETE FROM CUSTOMERS WHERE AGE > 26;
+Query OK, 4 rows affected (0.00 sec)
+
+mysql> SET FOREIGN_KEY_CHECKS = 1; -- Re-enable foreign key checks
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> 
